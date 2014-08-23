@@ -19,19 +19,19 @@ namespace SharpRepository.CouchDbRepository
         private readonly IQueryable<T> _baseQuery;
 
         internal CouchDbRepositoryBase()
-			: this("http://127.0.0.1:5984")
-         {
-         }
+            : this("http://127.0.0.1:5984")
+        {
+        }
 
         internal CouchDbRepositoryBase(string url, string database = null)
         {
             if (String.IsNullOrEmpty(database))
             {
-                database = typeof (T).Name;
+                database = typeof(T).Name;
             }
             _database = database.ToLower(); // CouchDb requires lowercase  database names
 
-	        _serverUrl = url;
+            _serverUrl = url;
 
             Client = new CouchDbClient<T>(_serverUrl, _database);
 
@@ -299,12 +299,12 @@ namespace SharpRepository.CouchDbRepository
 
         public override void Dispose()
         {
-            
+
         }
 
         private static string GeneratePrimaryKey()
         {
-            return (string) Convert.ChangeType(Guid.NewGuid().ToString("N"), typeof (string));
+            return (string)Convert.ChangeType(Guid.NewGuid().ToString("N"), typeof(string));
         }
     }
 }

@@ -7,12 +7,8 @@ namespace SharpRepository.CouchDbRepository
         {
         }
 
-        public CouchDbRepository(string host) : base(host)
-        {
-        }
-
-        public CouchDbRepository(string host, int port, string database = null, string username = null, string password = null)
-            : base(host, port, database, username, password)
+        public CouchDbRepository(string url, string database = null)
+            : base(url, database)
         {
         }
     }

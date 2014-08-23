@@ -9,7 +9,9 @@ namespace SharpRepository.CouchDbRepository
     {
         public static string Execute(string url, string method, string postdata=null, string contenttype=null)
         {
-            var req = WebRequest.Create(url) as HttpWebRequest;
+	        var uri = new Uri(url);
+
+			var req = WebRequest.Create(uri) as HttpWebRequest;
             req.Method = method;
             // Yuk - set an infinite timeout on this for now, because
             // executing a temporary view (for example) can take a very
@@ -17,6 +19,8 @@ namespace SharpRepository.CouchDbRepository
             req.Timeout = System.Threading.Timeout.Infinite;
             if (contenttype != null)
                 req.ContentType = contenttype;
+
+	        req.Credentials = GetCredentialsFromUrl(uri);
 
             if (postdata != null)
             {
@@ -44,5 +48,26 @@ namespace SharpRepository.CouchDbRepository
             }
             
         }
+
+	    private static NetworkCredential GetCredentialsFromUrl(Uri url)
+	    {
+			if (url.UserInfo.Length != 0)
+			{
+				var userInfo = url.UserInfo;
+				var userName = userInfo;
+				var password = "";
+				var length = userInfo.IndexOf(':');
+				if (length != -1)
+				{
+					userName = Uri.UnescapeDataString(userInfo.Substring(0, length));
+					var startIndex = length + 1;
+					password = Uri.UnescapeDataString(userInfo.Substring(startIndex, userInfo.Length - startIndex));
+				}
+
+				return new NetworkCredential(userName, password);
+			}
+
+			return null;
+	    }
     }
 }

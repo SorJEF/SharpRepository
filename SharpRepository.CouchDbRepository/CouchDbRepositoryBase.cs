@@ -19,16 +19,11 @@ namespace SharpRepository.CouchDbRepository
         private readonly IQueryable<T> _baseQuery;
 
         internal CouchDbRepositoryBase()
-            : this("127.0.0.1", 5984)
+			: this("http://127.0.0.1:5984")
          {
          }
 
-        internal CouchDbRepositoryBase(string host)
-            : this(host, 5984)
-        {
-        }
-
-        internal CouchDbRepositoryBase(string host, int port, string database = null, string username = null, string password = null)
+        internal CouchDbRepositoryBase(string url, string database = null)
         {
             if (String.IsNullOrEmpty(database))
             {
@@ -36,7 +31,7 @@ namespace SharpRepository.CouchDbRepository
             }
             _database = database.ToLower(); // CouchDb requires lowercase  database names
 
-            _serverUrl = String.Format("http://{0}:{1}", host, port);
+	        _serverUrl = url;
 
             Client = new CouchDbClient<T>(_serverUrl, _database);
 
